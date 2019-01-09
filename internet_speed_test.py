@@ -1,7 +1,7 @@
 import speedtest
 from datetime import datetime as dt
 from path import Path
-from os import path
+from os import chdir, path
 import logging
 
 logger = logging.getLogger('Speedtest')
@@ -33,19 +33,21 @@ def test_speed():
         return test.results.dict()
 
 
-def write_to_file(file_name, given_string):
+def write_to_file(path_name, given_string):
     '''Goal: Given a file name and string, creates a file with the string or appends the string to the file
     Input: file to write, string to write to file
     Output: Depending if file exists, this is create file and write string to file, otherwise will append string to file
     '''
     logger.info('Writing to file')
-    if path.exists(Path(f'./{file_name}')):
+    folder_path, file_name = path_name.rsplit('/', 1)
+    chdir(folder_path)
+    if path.exists(file_name):
         logger.debug('File already exists in write_to_file: %s', file_name)
-        with open(Path(f'./{file_name}'), 'a') as appendable_file:
+        with open(file_name, 'a') as appendable_file:
             appendable_file.write(given_string+'\n')
     else:
         logger.debug('File does not exist in write_to_file: %s', file_name)
-        with open(Path(f'./{file_name}'), 'w') as writable_file:
+        with open(file_name, 'w') as writable_file:
             # Headers are:
             # DATE
             # TIME
@@ -97,12 +99,13 @@ def main():
     end_time = dt.now()
     process_time = end_time - start_time
     if internet_test == None:
-        logger.debug('Speedtest failed, cancelling rest of script')
+        logger.debug('Speedtest failed, canceling rest of script')
     else:
         logger.info('Test Complete')
         result_string = speed_to_string(internet_test, time_called)
         result_string += str(process_time)
-        write_to_file('internet_speed.csv', result_string)
+        write_to_file(
+            '/home/pi/Documents/speedtest_files/internet_speed.csv', result_string)
         logger.info('Script Complete')
         logger.info('-'*50)
 
