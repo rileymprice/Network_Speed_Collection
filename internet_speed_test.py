@@ -1,12 +1,13 @@
 import speedtest
 from datetime import datetime as dt
 from path import Path
-from os import chdir,path
+from os import path
 import logging
 
 logger = logging.getLogger('Speedtest')
 logger.setLevel(logging.DEBUG)
-handler = logging.FileHandler('/home/pi/Documents/speedtest_files/logs/speedtest.log')
+handler = logging.FileHandler(
+    '/home/pi/Documents/speedtest_files/logs/speedtest.log')
 formatter = logging.Formatter(
     '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
@@ -39,7 +40,7 @@ def write_to_file(path_name, given_string):
     Output: Depending if file exists, this is create file and write string to file, otherwise will append string to file
     '''
     logger.info('Writing to file')
-    folder_path,file_name = path_name.rsplit('/',1)
+    folder_path, file_name = path_name.rsplit('/', 1)
     chdir(folder_path)
     if path.exists(file_name):
         logger.debug('File already exists in write_to_file: %s', file_name)
@@ -104,7 +105,8 @@ def main():
         logger.info('Test Complete')
         result_string = speed_to_string(internet_test, time_called)
         result_string += str(process_time)
-        write_to_file('/home/pi/Documents/speedtest_files/internet_speed.csv', result_string)
+        write_to_file(
+            '/home/pi/Documents/speedtest_files/internet_speed.csv', result_string)
         logger.info('Script Complete')
         logger.info('-'*50)
 
