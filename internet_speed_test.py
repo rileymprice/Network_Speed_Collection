@@ -2,16 +2,15 @@ import speedtest
 from datetime import datetime as dt
 import time
 from path import Path
-from os import path, chdir, environ
+from os import path, chdir, getcwd
 from sys import platform
 import logging
 
-HOME = environ.get("HOME")
-
-WINDOWS_LOGGER = "E:\\Documents\\speedtest_files\\logs\\speedtest.log"
-WINDOWS_FILE = "E:\\Documents\\speedtest_files\\internet_speed.csv"
-PI_LOGGER = "/home/riley/GitHub/Network_Speed_Collection/logs/speedtest.log"
-PI_FILE = "/home/riley/GitHub/Network_Speed_Collection/internet_speed.csv"
+CWD = getcwd()
+WINDOWS_LOGGER = f"{CWD}\\logs\\speedtest.log"
+WINDOWS_FILE = f"{CWD}\\internet_speed.csv"
+PI_LOGGER = f"{CWD}/logs/speedtest.log"
+PI_FILE = f"{CWD}/internet_speed.csv"
 
 platform_os = "win" if str(platform) == "win32" else "pi"
 LOG_FILE = WINDOWS_LOGGER if platform_os == "win" else PI_LOGGER
